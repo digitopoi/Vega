@@ -10,7 +10,7 @@ namespace vega.Controllers
     public class MakesController : Controller
     {
         private readonly VegaDbContext _context;
-        public  MakesConstroller(VegaDbContext context)
+        public MakesController(VegaDbContext context)
         {
             this._context = context;
         }
