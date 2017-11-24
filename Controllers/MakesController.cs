@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using vega.Controllers.Resources;
 using vega.Models;
 using vega.Persistence;
 
@@ -10,15 +12,19 @@ namespace vega.Controllers
     public class MakesController : Controller
     {
         private readonly VegaDbContext _context;
-        public MakesController(VegaDbContext context)
+        private readonly IMapper _mapper;
+        public MakesController (VegaDbContext context, IMapper mapper)
         {
+            this._mapper = mapper;
             this._context = context;
         }
 
-        [HttpGet("/api/makes")]
-        public async Task<IEnumerable<Make>> GetMakes()
+        [HttpGet ("/api/makes")]
+        public async Task<IEnumerable<MakeResource>> GetMakes ()
         {
-            return await _context.Makes.Include(m => m.Models).ToListAsync();
+            var makes = await _context.Makes.Include (m => m.Models).ToListAsync ();
+
+            return _mapper.Map<List<Make>, List<MakeResource>>(makes);
         }
     }
 }
