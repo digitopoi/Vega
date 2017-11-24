@@ -23,6 +23,11 @@ namespace vega.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateVehicle ([FromBody] VehicleResource vehicleResource)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            
             var vehicle = _mapper.Map<VehicleResource, Vehicle> (vehicleResource);
 
             vehicle.LastUpdate = DateTime.Now;
