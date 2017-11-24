@@ -1,15 +1,24 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using vega.Controllers.Resources;
 using vega.Models;
 
 namespace vega.Controllers
 {
-    [Route("/api/vehicles")]
+    [Route ("/api/vehicles")]
     public class VehiclesController : Controller
     {
-        [HttpPost]
-        public IActionResult CreateVehicle([FromBody] Vehicle vehicle)
+        private readonly IMapper _mapper;
+        public VehiclesController (IMapper mapper)
         {
-            return Ok(vehicle);
+            this._mapper = mapper;
+        }
+
+        [HttpPost]
+        public IActionResult CreateVehicle ([FromBody] VehicleResource vehicleResource)
+        {
+            var vehicle = _mapper.Map<VehicleResource, Vehicle>(vehicleResource);
+            return Ok (vehicle);
         }
     }
 }
