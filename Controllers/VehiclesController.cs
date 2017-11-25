@@ -15,9 +15,11 @@ namespace vega.Controllers
         private readonly IMapper _mapper;
         private readonly VegaDbContext _context;
         private readonly IVehicleRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public VehiclesController (IMapper mapper, VegaDbContext context, IVehicleRepository repository)
+        public VehiclesController (IMapper mapper, VegaDbContext context, IVehicleRepository repository, IUnitOfWork unitOfWork)
         {
+            this._unitOfWork = unitOfWork;
             this._repository = repository;
             this._context = context;
             this._mapper = mapper;
@@ -35,10 +37,10 @@ namespace vega.Controllers
 
             vehicle.LastUpdate = DateTime.Now;
 
-            _repository.Add(vehicle);
+            _repository.Add (vehicle);
             await _context.SaveChangesAsync ();
 
-            vehicle = await _repository.GetVehicle(vehicle.Id);
+            vehicle = await _repository.GetVehicle (vehicle.Id);
 
             var result = _mapper.Map<Vehicle, VehicleResource> (vehicle);
             return Ok (result);
@@ -52,7 +54,7 @@ namespace vega.Controllers
                 return BadRequest ();
             }
 
-            var vehicle = await _repository.GetVehicle(id);
+            var vehicle = await _repository.GetVehicle (id);
 
             if (vehicle == null)
             {
@@ -72,14 +74,14 @@ namespace vega.Controllers
         [HttpDelete ("{id}")]
         public async Task<IActionResult> DeleteVehicle (int id)
         {
-            var vehicle = await _repository.GetVehicle(id, includeRelated: false);
+            var vehicle = await _repository.GetVehicle (id, includeRelated: false);
 
             if (vehicle == null)
             {
                 return NotFound ();
             }
 
-            _repository.Remove(vehicle);
+            _repository.Remove (vehicle);
 
             await _context.SaveChangesAsync ();
 
@@ -89,7 +91,7 @@ namespace vega.Controllers
         [HttpGet ("{id}")]
         public async Task<IActionResult> GetVehicle (int id)
         {
-            var vehicle = await _repository.GetVehicle(id);
+            var vehicle = await _repository.GetVehicle (id);
 
             if (vehicle == null)
             {
