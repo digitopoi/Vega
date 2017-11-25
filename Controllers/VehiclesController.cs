@@ -65,6 +65,8 @@ namespace vega.Controllers
 
             await _unitOfWork.CompleteAsync();
 
+            vehicle = await _repository.GetVehicle(vehicle.Id);
+
             var result = _mapper.Map<Vehicle, VehicleResource> (vehicle);
             return Ok (result);
         }
