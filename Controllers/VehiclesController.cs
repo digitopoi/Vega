@@ -38,12 +38,7 @@ namespace vega.Controllers
             _context.Vehicles.Add (vehicle);
             await _context.SaveChangesAsync ();
 
-            vehicle = await _context.Vehicles
-                .Include (v => v.Features)
-                .ThenInclude (vf => vf.Feature)
-                .Include (v => v.Model)
-                .ThenInclude (m => m.Make)
-                .SingleOrDefaultAsync (v => v.Id == vehicle.Id);
+            vehicle = await _repository.GetVehicle(vehicle.Id);
 
             var result = _mapper.Map<Vehicle, VehicleResource> (vehicle);
             return Ok (result);
@@ -57,12 +52,7 @@ namespace vega.Controllers
                 return BadRequest ();
             }
 
-            var vehicle = await _context.Vehicles
-                .Include (v => v.Features)
-                .ThenInclude (vf => vf.Feature)
-                .Include (v => v.Model)
-                .ThenInclude (m => m.Make)
-                .SingleOrDefaultAsync (v => v.Id == id);
+            var vehicle = await _repository.GetVehicle(id);
 
             if (vehicle == null)
             {
@@ -99,12 +89,7 @@ namespace vega.Controllers
         [HttpGet ("{id}")]
         public async Task<IActionResult> GetVehicle (int id)
         {
-            var vehicle = await _context.Vehicles
-                .Include (v => v.Features)
-                .ThenInclude (vf => vf.Feature)
-                .Include (v => v.Model)
-                .ThenInclude (m => m.Make)
-                .SingleOrDefaultAsync (v => v.Id == id);
+            var vehicle = await _repository.GetVehicle(id);
 
             if (vehicle == null)
             {
