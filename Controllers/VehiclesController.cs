@@ -36,7 +36,14 @@ namespace vega.Controllers
             _context.Vehicles.Add(vehicle);
             await _context.SaveChangesAsync();
 
-            var result = _mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+            vehicle = await _context.Vehicles
+                                .Include(v => v.Features)
+                                    .ThenInclude(vf => vf.Feature)
+                                .Include(v => v.Model)
+                                    .ThenInclude(m => m.Make)
+                                .SingleOrDefaultAsync(v => v.Id == vehicle.Id);
+
+            var result = _mapper.Map<Vehicle, VehicleResource>(vehicle);
             return Ok(result);
         }
 
@@ -48,7 +55,12 @@ namespace vega.Controllers
                 return BadRequest();
             }
 
-            var vehicle = await _context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await _context.Vehicles
+                                .Include(v => v.Features)
+                                    .ThenInclude(vf => vf.Feature)
+                                .Include(v => v.Model)
+                                    .ThenInclude(m => m.Make)
+                                .SingleOrDefaultAsync(v => v.Id == id);
 
             if (vehicle == null)
             {
@@ -61,7 +73,7 @@ namespace vega.Controllers
 
             await _context.SaveChangesAsync();
 
-            var result = _mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+            var result = _mapper.Map<Vehicle, VehicleResource>(vehicle);
             return Ok(result);
         }
 
