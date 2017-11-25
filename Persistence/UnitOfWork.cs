@@ -12,7 +12,7 @@ namespace vega.Persistence
 
         }
 
-        public async Task Complete ()
+        public async Task CompleteAsync()
         {
             await _context.SaveChangesAsync();
         }
