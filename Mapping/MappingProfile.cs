@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using vega.Controllers.Resources;
-using vega.Models;
+using vega.Core;
+using vega.Core.Models;
 
 namespace vega.Mapping
 {
@@ -42,7 +43,6 @@ namespace vega.Mapping
                         v.Features.Add(f);
                 });
                 
-                // opt => opt.MapFrom(vr => vr.Features.Select(id => new VehicleFeature { FeatureId = id })));
         }
     }
 }

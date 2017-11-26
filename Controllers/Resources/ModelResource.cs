@@ -1,4 +1,4 @@
-using vega.Models;
+using vega.Core;
 
 namespace vega.Controllers.Resources
 {
