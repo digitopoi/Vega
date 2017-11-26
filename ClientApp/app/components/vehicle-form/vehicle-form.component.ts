@@ -25,10 +25,11 @@ export class VehicleFormComponent implements OnInit {
   }
 
   onMakeChange() {
-    var selectedMake = this.makes.find(m => m.id == this.vehicle.make);
+    var selectedMake = this.makes.find(m => m.id == this.vehicle.makeId);
     //  to prevent error if user selects a make and then selects the empty option
     //  selectedMake is undefined -- now selected make will be an empty array
     this.models = selectedMake ? selectedMake.models : [];
+    delete this.vehicle.modelId;
   }
 
 }
