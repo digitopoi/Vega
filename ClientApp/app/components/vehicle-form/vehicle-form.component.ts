@@ -1,3 +1,4 @@
+import { ANY_STATE } from '@angular/animations/browser/src/dsl/animation_transition_expr';
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from '../../services/vehicle.service';
 
@@ -10,7 +11,9 @@ export class VehicleFormComponent implements OnInit {
   makes: any[];
   models: any[];
   features: any[];
-  vehicle: any = {};
+  vehicle: any = {
+    features: []
+  };
 
 
   constructor(
@@ -30,6 +33,16 @@ export class VehicleFormComponent implements OnInit {
     //  selectedMake is undefined -- now selected make will be an empty array
     this.models = selectedMake ? selectedMake.models : [];
     delete this.vehicle.modelId;
+  }
+
+  onFeatureToggle(featureId: any, $event: any){
+    if ($event.target.checked) {
+      this.vehicle.features.push(featureId);
+    }
+    else {
+      var index = this.vehicle.features.indexOf(featureId);
+      this.vehicle.features.splice(index, 1);
+    }
   }
 
 }
